@@ -1,11 +1,9 @@
-import type { CartItem } from '../types';
+import { useCartState, useCartDispatch } from '../context/CartContext';
 
-interface CartItemsListProps {
-  items?: CartItem[];
-  onRemoveItem?: (id: string) => void;
-}
+export function CartItemsList() {
+  const { items } = useCartState();
+  const dispatch = useCartDispatch();
 
-export function CartItemsList({ items = [], onRemoveItem }: CartItemsListProps) {
   if (items.length === 0) {
     return <p className="text-gray-500 text-sm">Your cart is empty.</p>;
   }
@@ -22,7 +20,7 @@ export function CartItemsList({ items = [], onRemoveItem }: CartItemsListProps) 
           </div>
           <button
             type="button"
-            onClick={() => onRemoveItem?.(item.id)}
+            onClick={() => dispatch({ type: 'removed', id: item.id })}
             className="text-red-600 hover:text-red-800 text-xs font-semibold px-2 py-1 rounded border border-red-200 hover:bg-red-50 cursor-pointer ml-3"
           >
             Remove
