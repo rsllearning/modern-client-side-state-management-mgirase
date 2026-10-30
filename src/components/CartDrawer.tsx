@@ -1,36 +1,27 @@
-import type { CartItem } from '../types';
+import { useCartStore, selectCartTotal } from '../store/cartStore';
 import { CartItemsList } from './CartItemsList';
+import { CartErrorBanner } from './CartErrorBanner';
+import { CheckoutButton } from './CheckoutButton';
 
-interface CartDrawerProps {
-  items?: CartItem[];
-  onRemoveItem?: (id: string) => void;
-  onCheckout?: () => void;
-  isCheckingOut?: boolean;
-}
-
-export function CartDrawer({
-  items = [],
-  onRemoveItem,
-  onCheckout,
-  isCheckingOut = false,
-}: CartDrawerProps) {
-  const total = items.reduce((sum, item) => sum + item.price * item.qty, 0);
+export function CartDrawer() {
+  const total = useCartStore(selectCartTotal);
 
   return (
-    <aside className="border border-gray-300 rounded p-4 bg-white shadow-xs">
+    <aside className="border border-gray-300 rounded p-4 bg-white">
       <h2 className="text-lg font-bold mb-3">Cart Drawer</h2>
-      <CartItemsList items={items} onRemoveItem={onRemoveItem} />
 
-      <div className="mt-4 pt-3 border-t border-gray-200 flex items-center justify-between">
-        <span className="font-semibold text-base">Total: ${total}</span>
-        <button
-          type="button"
-          disabled={items.length === 0 || isCheckingOut}
-          onClick={onCheckout}
-          className="bg-green-600 hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white text-sm font-medium py-1.5 px-4 rounded cursor-pointer"
-        >
-          {isCheckingOut ? 'Checking out...' : 'Checkout'}
-        </button>
+      {/* Granular leaf: error banner */}
+      <CartErrorBanner />
+
+      {/* Cart items list */}
+      <CartItemsList />
+
+      {/* Subtotal and declarative checkout button */}
+      <div className="mt-4 pt-3 border-t border-gray-200">
+        <div className="flex items-center justify-between mb-3">
+          <span className="font-semibold text-base">Total: ${total}</span>
+        </div>
+        <CheckoutButton />
       </div>
     </aside>
   );

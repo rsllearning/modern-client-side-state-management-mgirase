@@ -2,11 +2,7 @@ import { useEffect, useState } from 'react';
 import type { Product } from '../types';
 import { ProductCard } from './ProductCard';
 
-interface CatalogProps {
-  onAddToCart?: (product: Product) => void;
-}
-
-export function Catalog({ onAddToCart }: CatalogProps) {
+export function Catalog() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -50,7 +46,7 @@ export function Catalog({ onAddToCart }: CatalogProps) {
       {!loading && !error && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {products.map((product) => (
-            <ProductCard key={product.id} product={product} onAddToCart={onAddToCart} />
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
       )}
